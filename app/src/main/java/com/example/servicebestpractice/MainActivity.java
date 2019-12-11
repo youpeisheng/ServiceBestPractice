@@ -41,8 +41,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent=new Intent(this,DownloadService.class);
         startService(intent);//启动服务
         bindService(intent,connection,BIND_AUTO_CREATE);//绑定服务
-        if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            != PackageManager.PERMISSION_GRANTED){
+        if(checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED){
+            requestPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,1);
             ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.WRITE_APN_SETTINGS},1);
         }
     }
