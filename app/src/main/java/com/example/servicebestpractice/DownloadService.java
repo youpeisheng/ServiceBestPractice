@@ -1,6 +1,7 @@
 package com.example.servicebestpractice;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -12,6 +13,7 @@ import android.os.IBinder;
 import android.widget.Toast;
 
 import java.io.File;
+import java.net.IDN;
 
 public class DownloadService extends Service {
     private DownloadTask downloadTask;
@@ -95,10 +97,14 @@ public class DownloadService extends Service {
     private NotificationManager getNotificationManager(){
         return (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     }
-    private Notification getNotification(String title,int progress){
+    private Notification getNotification(String title,int progress){ //需要提供有效的前台通知通道
+        String ID="channel_1";
         Intent intent=new Intent(this,MainActivity.class);
         PendingIntent pi=PendingIntent.getActivity(this,0,intent,0);
-        Notification.Builder builder=new Notification.Builder(this);
+        NotificationManager manager=(NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        NotificationChannel channel=new NotificationChannel(ID,"前台服务",NotificationManager.IMPORTANCE_HIGH);
+        manager.createNotificationChannel(channel);
+        Notification.Builder builder=new Notification.Builder(this,ID);
         builder.setSmallIcon(R.mipmap.ic_launcher);
         builder.setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher));
         builder.setContentIntent(pi);

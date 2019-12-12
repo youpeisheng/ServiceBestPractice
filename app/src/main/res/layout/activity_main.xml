@@ -26,5 +26,12 @@
         android:layout_height="wrap_content"
         android:textAllCaps="false"
         android:text="Cancel Download"/>
+    <Button
+        android:id="@+id/apply_writestorge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:text="申请 外部存储权限"
+        />
 
 </LinearLayout>

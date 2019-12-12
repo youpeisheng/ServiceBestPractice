@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
@@ -35,17 +36,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button startDonwload=(Button) findViewById(R.id.start_download);
         Button pauseDownload=(Button) findViewById(R.id.pause_download);
         Button cancelDownload=(Button) findViewById(R.id.cancel_download);
+        Button applyWriteStorge=(Button) findViewById(R.id.apply_writestorge);
         startDonwload.setOnClickListener(this);
         pauseDownload.setOnClickListener(this);
         cancelDownload.setOnClickListener(this);
+        applyWriteStorge.setOnClickListener(this);
         Intent intent=new Intent(this,DownloadService.class);
         startService(intent);//启动服务
         bindService(intent,connection,BIND_AUTO_CREATE);//绑定服务
-        if(checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED){
-            requestPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,1);
-            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.WRITE_APN_SETTINGS},1);
-        }
+
     }
 
     @Override
@@ -55,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         switch (v.getId()){
             case R.id.start_download:
-                String url="http://raw.githubusercontent.com/guolindev/eclipse/master/eclipse-inst-win64.exe";
+                String url="https://raw.githubusercontent.com/guolindev/eclipse/master/eclipse-inst-win64.exe";
                 downloadBinder.startDownload(url);
                 break;
             case R.id.pause_download:
@@ -64,11 +63,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.cancel_download:
                 downloadBinder.cancelDownload();
                 break;
+            case R.id.apply_writestorge:
+                if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED){
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                }
                 default:
                     break;
         }
     }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode){
